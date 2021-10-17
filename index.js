@@ -4,7 +4,7 @@ const PORT = 3000;
 
 app.get("/", (req, res) => {
   res.json({
-    success: false,
+    success: true,
     message: "server is up and running..!",
   });
 });
