@@ -78,12 +78,14 @@ const products = [
 const express = require("express");
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router
+.get("/", (req, res) => {
   console.log("getting started is hard!");
   res.json({
     success: true,
     message: "getting started is hard!",
+    products,
   });
-});
+})
 
 module.exports = { router };
