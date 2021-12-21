@@ -1,4 +1,6 @@
+
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -7,10 +9,16 @@ const UserSchema = new Schema({
   username: {
     type: String,
     required: "email/username is required",
+    unique : true
   },
   password: {
     type: String,
     required: "password is required",
+    unique : true
+  },
+  cart: {
+    type: Schema.Types.ObjectId,
+    ref: "Cart",
   },
 });
 

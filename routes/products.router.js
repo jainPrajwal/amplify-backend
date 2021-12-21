@@ -77,14 +77,20 @@ const products = [
 
 const express = require("express");
 const router = express.Router();
+const { Product } = require("../models/product.model");
 
-router.get("/", (req, res) => {
-  console.log("getting started is hard!");
-  res.json({
-    success: true,
-    message: "getting started is hard!",
-    products,
-  });
+router.route("/").get(async (req, res) => {
+  
+  const products = await Product.find({});
+  try {
+    res.json({
+      success: true,
+      message: "getting started is hard!",
+      products,
+    });
+  } catch (error) {
+    console.log("error", error);
+  }
 });
 
 module.exports = { router };
