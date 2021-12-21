@@ -9,8 +9,8 @@ const products = [
     brand: "Boat",
     fastDelivery: true,
     color: "red",
-    totalAvailableQuantity: 6,
-    totalQuantity: 10,
+    totalAvailableQuantity: 10,
+    totalQuantity: 0,
     availableColors: [
       {
         colorId: "c1",
@@ -46,8 +46,8 @@ const products = [
     brand: "Boat",
     fastDelivery: true,
     color: "red",
-    totalAvailableQuantity: 7,
-    totalQuantity: 11,
+    totalAvailableQuantity: 11,
+    totalQuantity: 0,
     availableColors: [
       {
         colorId: "c1",
@@ -78,14 +78,13 @@ const products = [
 const express = require("express");
 const router = express.Router();
 
-router
-.get("/", (req, res) => {
+router.get("/", (req, res) => {
   console.log("getting started is hard!");
   res.json({
     success: true,
     message: "getting started is hard!",
     products,
   });
-})
+});
 
 module.exports = { router };
