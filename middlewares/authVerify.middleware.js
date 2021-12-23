@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { findUserByUserId } = require("../utils/user.utils");
+
+
 const authVerify = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
