@@ -10,7 +10,7 @@ const { router: signupRouter } = require("./routes/signup.router");
 const { router: loginRouter } = require("./routes/login.router");
 
 const {
-  routeNotFound,
+  routeNotFoundHandler,
 } = require("./middlewares/route-not-found-handler.middleware");
 const { errorHandler } = require("./middlewares/error-handler.middleware");
 
@@ -34,7 +34,7 @@ app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 
 // PLEASE DON'T MOVE.
-app.use(routeNotFound);
+app.use(routeNotFoundHandler);
 
 app.use(errorHandler);
 

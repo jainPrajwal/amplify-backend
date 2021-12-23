@@ -8,6 +8,16 @@ const findCartByCartId = async (cartId) => {
   }
 };
 
-const findCartByUserId = (userId) => {};
+const findCartByUser = async (user) => {
+  try {
+    const foundCart = await Cart.findOne({ cart: user.cart });
+    console.log("foundCart line 14 cart.utils", foundCart);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "somethin went wrong while fetching your cart..!",
+    });
+  }
+};
 
-module.exports = { findCartByCartId };
+module.exports = { findCartByCartId,findCartByUser };

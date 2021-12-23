@@ -1,4 +1,5 @@
 const { User } = require("../models/user.model");
+const {Cart} = require("../models/cart.model")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { findUserByUserId, findUserByUsername } = require("../utils/user.utils");

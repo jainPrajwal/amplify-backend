@@ -84,8 +84,8 @@ const saveItemToDatabase = async (req, res, productToBeSaved) => {
 
     const savedCartItem = await new CartItem(updatedProduct).save();
     res.status(201).json({
-      succeess : true,
-      message : "carItem Saved!",
+      succeess: true,
+      message: "carItem Saved!",
       cartItem: savedCartItem,
     });
   } catch (error) {
@@ -95,7 +95,6 @@ const saveItemToDatabase = async (req, res, productToBeSaved) => {
     });
   }
 };
-
 
 const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
   try {
@@ -124,9 +123,15 @@ const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
   }
 };
 
+const checkIfUserHasCart = async (user) => {
+  const cart = await findCartByUser(user._id);
+  console.log({ cart });
+};
+
 module.exports = {
   getAllItemsInCartByCart,
   getAllItemsInCartByUser,
   saveItemToDatabase,
   updateItemInDatabase,
+  checkIfUserHasCart,
 };
