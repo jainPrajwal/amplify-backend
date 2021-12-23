@@ -8,4 +8,6 @@ const findCartByCartId = async (cartId) => {
   }
 };
 
+const findCartByUserId = (userId) => {};
+
 module.exports = { findCartByCartId };

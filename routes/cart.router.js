@@ -1,13 +1,35 @@
 const express = require("express");
-const { getAllItemsInCartByCartId } = require("./controllers/cart.controller");
+const {
+  getAllItemsInCartByUser,
+  saveItemToDatabase,
+  updateItemInDatabase,
+} = require("../controllers/cart.controller");
+const { authVerify } = require("../middlewares/authVerify.middleware");
+
 const router = express.Router();
 
-router.get("/:cartId", async (req, res) => {
-  try {
-    await getAllItemsInCartByCartId(req, res);
-  } catch (error) {
-    console.log(error);
-  }
+router.param("userId", authVerify);
+router
+  .route("/:userId")
+  .get(async (req, res) => {
+    try {
+      await getAllItemsInCartByUser(req, res);
+    } catch (error) {
+      console.log(error);
+    }
+  })
+  .post(async (req, res) => {
+    const productToBeSaved = req.body;
+    try {
+      await saveItemToDatabase(req, res, productToBeSaved);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+router.route("/:userId/:productId").post(async (req, res) => {
+  const updatedMetricsFromClient = req.body;
+  await updateItemInDatabase(req, res, updatedMetricsFromClient);
 });
 
 module.exports = { router };
