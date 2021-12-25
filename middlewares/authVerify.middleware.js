@@ -1,13 +1,19 @@
 const jwt = require("jsonwebtoken");
 const { findUserByUserId } = require("../utils/user.utils");
 
-
 const authVerify = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const mySecret = process.env["mySecret"];
     const { userId } = jwt.verify(token, mySecret);
     const user = await findUserByUserId(userId);
+
+    if (userId !== req.params.userId) {
+      return res.json({
+        success: false,
+        message: "token mismatch error",
+      });
+    }
     if (!user) {
       return res.status(401).json({
         success: true,

@@ -8,6 +8,7 @@ const ColorSchema = new Schema({
 });
 
 const CartItemSchema = new Schema({
+  productId : Schema.Types.ObjectId,
   name: String,
   image: String,
   sellingPrice: Number,

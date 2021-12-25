@@ -8,6 +8,7 @@ const { router: productsRouter } = require("./routes/products.router");
 const { router: cartRouter } = require("./routes/cart.router");
 const { router: signupRouter } = require("./routes/signup.router");
 const { router: loginRouter } = require("./routes/login.router");
+const { router: wishlistRouter } = require("./routes/wishlist.router");
 
 const {
   routeNotFoundHandler,
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
 
 app.use("/products", productsRouter);
 app.use("/cart", cartRouter);
+app.use("/wishlist", wishlistRouter);
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
 

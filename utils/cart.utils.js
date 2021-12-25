@@ -1,4 +1,5 @@
 const { Cart } = require("../models/cart.model");
+const { User } = require("../models/user.model");
 
 const findCartByCartId = async (cartId) => {
   try {
@@ -10,8 +11,7 @@ const findCartByCartId = async (cartId) => {
 
 const findCartByUser = async (user) => {
   try {
-    const foundCart = await Cart.findOne({ cart: user.cart });
-    console.log("foundCart line 14 cart.utils", foundCart);
+    return await Cart.findById(user.cart);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -20,4 +20,4 @@ const findCartByUser = async (user) => {
   }
 };
 
-module.exports = { findCartByCartId,findCartByUser };
+module.exports = { findCartByCartId, findCartByUser };

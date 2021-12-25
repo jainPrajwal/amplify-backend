@@ -1,5 +1,6 @@
 const { findCartByCartId } = require("../utils/cart.utils");
 const { findUserByUserId } = require("../utils/user.utils");
+const { findCartByUser } = require("../utils/cart.utils");
 const { Cart } = require("../models/cart.model");
 const { User } = require("../models/user.model");
 const { CartItem } = require("../models/cartItem.model");
@@ -30,12 +31,11 @@ const getAllItemsInCartByUser = async (req, res) => {
 
   try {
     const user = await findUserByUserId(userId);
+    const cart = await findCartByUser(user);
 
-    const cart = await user.populate({
-      path: "cart",
-      populate: {
-        path: "cartItems",
-      },
+    console.log({ cart });
+    const populatedUser = await cart.populate({
+      path: "cartItems",
     });
 
     if (!user) {
@@ -47,7 +47,7 @@ const getAllItemsInCartByUser = async (req, res) => {
     return res.json({
       success: true,
       message: "user found",
-      cart,
+      populatedUser,
     });
   } catch (error) {
     console.error(error);
@@ -82,16 +82,32 @@ const saveItemToDatabase = async (req, res, productToBeSaved) => {
     const updatedProduct =
       increaseQuantityOfProductInRespectiveColor(productToBeSaved);
 
-    const savedCartItem = await new CartItem(updatedProduct).save();
+    const savedItemToCart = await new CartItem(updatedProduct).save();
+    const user = req.user;
+    const cart = await findCartByUser(user);
+    //if cart does not exist for the user create a new one
+    if (!cart) {
+      const newCartObj = { cartItems: [savedItemToCart._id] };
+      const newCart = await new Cart(newCartObj).save();
+      user.cart = newCart;
+      await user.save();
+    } else {
+      //just add the cartItemId
+      cart.cartItems.push(savedItemToCart._id);
+      console.log({ cart });
+      await cart.save();
+    }
+
     res.status(201).json({
       succeess: true,
       message: "carItem Saved!",
-      cartItem: savedCartItem,
+      cartItem: savedItemToCart,
     });
   } catch (error) {
     res.status(404).json({
       success: false,
       message: "something went wrong..!",
+      errorMessage: error.message,
     });
   }
 };
@@ -112,7 +128,7 @@ const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
     res.json({
       success: true,
       message: "product in cart updated",
-      newCartItem: oldCartItem,
+      newCartItem,
     });
   } catch (error) {
     res.status(500).json({
