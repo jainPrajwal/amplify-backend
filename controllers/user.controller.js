@@ -1,5 +1,5 @@
 const { User } = require("../models/user.model");
-const {Cart} = require("../models/cart.model")
+const { Cart } = require("../models/cart.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { findUserByUserId, findUserByUsername } = require("../utils/user.utils");
@@ -23,9 +23,9 @@ const saveUserToDatabase = async (req, res) => {
         user: savedUser,
       });
     } else {
-      res.json({
+      res.status(401).json({
         success: false,
-        message: "signup failed..!",
+        message: "User Unauthorized.Signup failed..!",
       });
     }
   } catch (error) {
@@ -64,7 +64,7 @@ const loginUser = async (req, res) => {
         token,
       });
     } else {
-      res.json({
+      res.status(401).json({
         success: false,
         message: "password is invalid..!",
       });
