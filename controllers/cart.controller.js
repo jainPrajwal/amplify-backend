@@ -139,6 +139,37 @@ const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
   }
 };
 
+const removeItemFromDatabase = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const user = req.user;
+    await CartItem.deleteOne({ _id: productId });
+    const cart = await findCartByUser(user);
+    if (!cart) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart not found..!",
+      });
+    }
+    const updatedCartItems = cart.cartItems.filter(
+      (itemInCart) => itemInCart != productId
+    );
+    cart.cartItems = updatedCartItems;
+    await cart.save();
+
+    res.json({
+      success: false,
+      message: "cartItem deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: true,
+      message: "something went wrong while removing item from cart",
+      errorMessage: error.message,
+    });
+  }
+};
+
 const checkIfUserHasCart = async (user) => {
   const cart = await findCartByUser(user._id);
   console.log({ cart });
@@ -150,4 +181,5 @@ module.exports = {
   saveItemToDatabase,
   updateItemInDatabase,
   checkIfUserHasCart,
+  removeItemFromDatabase,
 };

@@ -3,6 +3,7 @@ const {
   getAllItemsInCartByUser,
   saveItemToDatabase,
   updateItemInDatabase,
+  removeItemFromDatabase,
 } = require("../controllers/cart.controller");
 const { authVerify } = require("../middlewares/authVerify.middleware");
 const { cartHandler } = require("../middlewares/cart-handler.middleware");
@@ -28,9 +29,14 @@ router
     }
   });
 
-router.route("/:userId/:productId").post(async (req, res) => {
-  const updatedMetricsFromClient = req.body;
-  await updateItemInDatabase(req, res, updatedMetricsFromClient);
-});
+router
+  .route("/:userId/:productId")
+  .post(async (req, res) => {
+    const updatedMetricsFromClient = req.body;
+    await updateItemInDatabase(req, res, updatedMetricsFromClient);
+  })
+  .delete(async (req, res) => {
+    await removeItemFromDatabase(req, res);
+  });
 
 module.exports = { router };
