@@ -58,9 +58,11 @@ const loginUser = async (req, res) => {
       const token = await jwt.sign(payload, process.env["mySecret"], {
         expiresIn: "24h",
       });
+
       res.json({
         success: true,
         message: "user logged in successfully",
+        userId: userFound._id,
         token,
       });
     } else {
