@@ -28,13 +28,13 @@ const getAllItemsInCartByCart = async (req, res) => {
 
 const getAllItemsInCartByUser = async (req, res) => {
   const { userId } = req.params;
-
+  
   try {
     const user = await findUserByUserId(userId);
     const cart = await findCartByUser(user);
 
     console.log({ cart });
-    const populatedUser = await cart.populate({
+    const updatedCart = await cart.populate({
       path: "cartItems",
     });
 
@@ -46,8 +46,8 @@ const getAllItemsInCartByUser = async (req, res) => {
     }
     return res.json({
       success: true,
-      message: "user found",
-      populatedUser,
+      message: "cart found",
+      cart : updatedCart,
     });
   } catch (error) {
     console.error(error);

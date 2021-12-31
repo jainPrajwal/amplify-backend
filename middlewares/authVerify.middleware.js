@@ -3,7 +3,9 @@ const { findUserByUserId } = require("../utils/user.utils");
 
 const authVerify = async (req, res, next) => {
   try {
+    console.log("verifying auth..!");
     const token = req.headers.authorization.split(" ")[1];
+    console.log({ token });
     const mySecret = process.env["mySecret"];
     const { userId } = jwt.verify(token, mySecret);
     const user = await findUserByUserId(userId);
