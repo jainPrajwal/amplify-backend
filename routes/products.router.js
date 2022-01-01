@@ -83,7 +83,7 @@ const {
   getProductByProductId,
 } = require("../utils/product.utils");
 
-router.get(async (req, res) => {
+router.get("/",async (req, res) => {
   const products = await getAllProducts();
   try {
     res.json({
