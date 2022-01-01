@@ -77,11 +77,14 @@ const products = [
 
 const express = require("express");
 const router = express.Router();
-const { Product } = require("../models/product.model");
 
-router.route("/").get(async (req, res) => {
-  
-  const products = await Product.find({});
+const {
+  getAllProducts,
+  getProductByProductId,
+} = require("../utils/product.utils");
+
+router.get(async (req, res) => {
+  const products = await getAllProducts();
   try {
     res.json({
       success: true,
@@ -89,7 +92,34 @@ router.route("/").get(async (req, res) => {
       products,
     });
   } catch (error) {
-    console.log("error", error);
+    res.json({
+      success: false,
+      error: "somethign went wrong getting products..!",
+      errorMessage: error.message,
+    });
+  }
+});
+
+router.get("/:productId", async (req, res) => {
+  const { productId } = req.params;
+  try {
+    const product = await getProductByProductId(productId);
+    return product
+      ? res.json({
+          success: true,
+          message: "product found..!",
+          product,
+        })
+      : res.json({
+          success: false,
+          message: "product not found..!",
+        });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong while getting your products",
+      errorMessage: error.message,
+    });
   }
 });
 
