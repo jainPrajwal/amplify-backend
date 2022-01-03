@@ -28,7 +28,7 @@ const getAllItemsInCartByCart = async (req, res) => {
 
 const getAllItemsInCartByUser = async (req, res) => {
   const { userId } = req.params;
-  
+
   try {
     const user = await findUserByUserId(userId);
     const cart = await findCartByUser(user);
@@ -47,7 +47,7 @@ const getAllItemsInCartByUser = async (req, res) => {
     return res.json({
       success: true,
       message: "cart found",
-      cart : updatedCart,
+      cart: updatedCart,
     });
   } catch (error) {
     console.error(error);
@@ -142,6 +142,7 @@ const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
 const removeItemFromDatabase = async (req, res) => {
   try {
     const { productId } = req.params;
+    console.log("removeingItem from Database", productId);
     const user = req.user;
     await CartItem.deleteOne({ _id: productId });
     const cart = await findCartByUser(user);
@@ -158,12 +159,12 @@ const removeItemFromDatabase = async (req, res) => {
     await cart.save();
 
     res.json({
-      success: false,
+      success: true,
       message: "cartItem deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
-      success: true,
+      success: false,
       message: "something went wrong while removing item from cart",
       errorMessage: error.message,
     });
