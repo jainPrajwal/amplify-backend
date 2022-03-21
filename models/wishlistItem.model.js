@@ -3,7 +3,7 @@ require("mongoose-type-url");
 const { Schema } = mongoose;
 
 const WishlistItemSchema = new Schema({
-  productId: Schema.Types.ObjectId,
+  productId: String,
   name: String,
   category: String,
   subcategory: String,

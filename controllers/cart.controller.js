@@ -142,7 +142,7 @@ const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
 const removeItemFromDatabase = async (req, res) => {
   try {
     const { productId } = req.params;
-    console.log("removeingItem from Database", productId);
+    
     const user = req.user;
     await CartItem.deleteOne({ _id: productId });
     const cart = await findCartByUser(user);

@@ -44,17 +44,17 @@ const saveWishlistItemToDatabase = async (req, res) => {
       user.wishlist = savedWishlist;
       await user.save();
       res.status(201).json({
-        success: false,
+        success: true,
         message: "new Wishlist created",
-        wishlist: newWishlist,
+        wishlist: await newWishlist.populate("wishlistItems"),
       });
     } else {
       wishlist.wishlistItems.push(savedWishlistItem._id);
       await wishlist.save();
       res.json({
-        success: false,
+        success: true,
         message: "wishlist updated",
-        wishlist,
+        wishlist : await wishlist.populate("wishlistItems"),
       });
     }
   } catch (error) {
@@ -68,6 +68,7 @@ const saveWishlistItemToDatabase = async (req, res) => {
 
 const removeWishlistedItemFromDatabase = async (req, res) => {
   const { wishlistedItemId } = req.params;
+  console.log("wishlistedItem", wishlistedItemId);
   const user = req.user;
   try {
     const wishlist = await findWishlistByUser(user);
