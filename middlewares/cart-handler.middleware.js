@@ -2,7 +2,7 @@ const express = require("express");
 
 const cartHandler = async (req, res, next) => {
   try {
-    await checkIfUserHasCart();
+    // await checkIfUserHasCart();
     next();
   } catch (error) {
     return res.json({

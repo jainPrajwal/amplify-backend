@@ -55,7 +55,7 @@ const loginUser = async (req, res) => {
     );
     if (isPasswordValid) {
       const payload = { userId: userFound._id };
-      const token = await jwt.sign(payload, process.env["mySecret"], {
+      const token = jwt.sign(payload, process.env["mySecret"], {
         expiresIn: "24h",
       });
 
