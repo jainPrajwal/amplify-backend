@@ -27,35 +27,12 @@ const getAllItemsInCartByCart = async (req, res) => {
 };
 
 const getAllItemsInCartByUser = async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const user = await findUserByUserId(userId);
-    const cart = await findCartByUser(user);
-
-    console.log({ cart });
-    const updatedCart = await cart.populate({
-      path: "cartItems",
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "user not found..!",
-      });
-    }
-    return res.json({
-      success: true,
-      message: "cart found",
-      cart: updatedCart,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(404).json({
-      success: false,
-      message: "something went wrong while finding your account..!",
-    });
-  }
+  return res.json({
+    success: true,
+    message: "cart found",
+    cart: req?.cart,
+  });
+  
 };
 
 const increaseQuantityOfProductInRespectiveColor = (product) => {
@@ -142,7 +119,7 @@ const updateItemInDatabase = async (req, res, updatedMetricsFromClient) => {
 const removeItemFromDatabase = async (req, res) => {
   try {
     const { productId } = req.params;
-    
+
     const user = req.user;
     await CartItem.deleteOne({ _id: productId });
     const cart = await findCartByUser(user);
@@ -172,7 +149,7 @@ const removeItemFromDatabase = async (req, res) => {
 };
 
 const checkIfUserHasCart = async (user) => {
-  const cart = await findCartByUser(user._id);
+  const cart = await findCartByUser(user);
   console.log({ cart });
 };
 

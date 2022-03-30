@@ -11,6 +11,7 @@ const { cartHandler } = require("../middlewares/cart-handler.middleware");
 const router = express.Router();
 
 router.param("userId", authVerify);
+router.param("userId", cartHandler);
 router
   .route("/:userId")
   .get(async (req, res) => {

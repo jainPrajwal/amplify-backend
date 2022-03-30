@@ -1,5 +1,4 @@
 const { Cart } = require("../models/cart.model");
-const { User } = require("../models/user.model");
 
 const findCartByCartId = async (cartId) => {
   try {

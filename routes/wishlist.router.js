@@ -5,9 +5,11 @@ const {
   removeWishlistedItemFromDatabase,
 } = require("../controllers/wishlist.controller");
 const { authVerify } = require("../middlewares/authVerify.middleware");
+const { wishlistHandler } = require("../middlewares/wishlist-handler.middleware");
 const router = express.Router();
 
 router.param("userId", authVerify);
+router.param("userId", wishlistHandler);
 router
   .route("/:userId")
   .get(async (req, res) => {

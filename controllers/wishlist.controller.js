@@ -6,21 +6,13 @@ const {
 } = require("../utils/wishlist.utils");
 
 const getAllWishlistItemsByUser = async (req, res) => {
+  
   try {
-    const user = req.user;
-    const wishlist = await findWishlistByUser(user);
-    if (wishlist) {
-      res.json({
-        success: true,
-        wishlist: await wishlist.populate("wishlistItems"),
-        message: "your wishlist is here..!",
-      });
-    } else {
-      res.status(401).json({
-        success: false,
-        message: "wishlist not found..!",
-      });
-    }
+    res.json({
+      success: true,
+      wishlist: await req?.wishlist?.populate("wishlistItems"),
+      message: "your wishlist is here..!",
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -54,7 +46,7 @@ const saveWishlistItemToDatabase = async (req, res) => {
       res.json({
         success: true,
         message: "wishlist updated",
-        wishlist : await wishlist.populate("wishlistItems"),
+        wishlist: await wishlist.populate("wishlistItems"),
       });
     }
   } catch (error) {
