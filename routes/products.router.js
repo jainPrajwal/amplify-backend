@@ -76,6 +76,7 @@ const products = [
 ];
 
 const express = require("express");
+const { Product } = require("../models/product.model");
 const router = express.Router();
 
 const {
@@ -83,22 +84,46 @@ const {
   getProductByProductId,
 } = require("../utils/product.utils");
 
-router.get("/",async (req, res) => {
-  const products = await getAllProducts();
-  try {
-    res.json({
-      success: true,
-      message: "getting started is hard!",
-      products,
-    });
-  } catch (error) {
-    res.json({
-      success: false,
-      error: "somethign went wrong getting products..!",
-      errorMessage: error.message,
-    });
-  }
-});
+router
+  .route(``)
+  .get(async (req, res) => {
+    const products = await getAllProducts();
+    try {
+      res.status(200).json({
+        success: true,
+        message: "products fetched successfully!",
+        products,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: "somethign went wrong getting products..!",
+        errorMessage: error.message,
+      });
+    }
+  })
+  .post(async (req, res) => {
+    const {
+      body: { product },
+    } = req;
+    try {
+      const savedProduct = await new Product(product).save();
+      if (savedProduct) {
+        res.status(201).json({
+          success: true,
+          message: `product added successfully`,
+          product: savedProduct,
+        });
+      }
+    } catch (error) {
+      console.error(`somethinf went wrong while adding product `, error);
+      res.status(500).json({
+        success: false,
+        message: `somethinf went wrong while adding product`,
+        errorMessage: error.message,
+      });
+    }
+  });
 
 router.get("/:productId", async (req, res) => {
   const { productId } = req.params;

@@ -3,8 +3,8 @@ const { Wishlist } = require("../models/wishlist.model");
 const { findUserByUserId } = require("../utils/user.utils");
 const { findWishlistByUser } = require("../utils/wishlist.utils");
 
-const getOrCreateWishlist = async (req, next) => {
-  console.log("getOrCreatwWishlist")
+const getOrCreateWishlist = async (req, res, next) => {
+  
   const { userId } = req.params;
   let updatedWishlist = [];
 
@@ -23,12 +23,12 @@ const getOrCreateWishlist = async (req, next) => {
         const newWishlist = new Wishlist({
           wishlistItems: [],
         });
-        updatedWishlist = await newWishlist.save().populate("wishlistItems");
+        updatedWishlist = await newWishlist.save();
         user.wishlist = updatedWishlist;
         await user.save();
       }
-      req.wishlist = updatedWishlist;
-      console.log("getOrCreateWishlist", req.wishlist)
+      req.wishlist = await updatedWishlist.populate("wishlistItems");
+      
       next();
     }
   } catch (error) {
@@ -42,7 +42,7 @@ const getOrCreateWishlist = async (req, next) => {
 
 const wishlistHandler = async (req, res, next) => {
   try {
-    await getOrCreateWishlist(req,next);
+    await getOrCreateWishlist(req,res, next);
   } catch (error) {
     res.json({
       success: false,

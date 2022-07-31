@@ -60,7 +60,7 @@ const saveWishlistItemToDatabase = async (req, res) => {
 
 const removeWishlistedItemFromDatabase = async (req, res) => {
   const { wishlistedItemId } = req.params;
-  console.log("wishlistedItem", wishlistedItemId);
+  
   const user = req.user;
   try {
     const wishlist = await findWishlistByUser(user);
@@ -71,17 +71,17 @@ const removeWishlistedItemFromDatabase = async (req, res) => {
         message: "wishlistItem not found..!",
       });
     }
-    console.log({ wishlist });
+    
 
     await WishlistItem.deleteOne({ _id: wishlistedItemId });
 
     const updatedWishlistItems = wishlist.wishlistItems.filter(
       (itemInWishlist) => {
-        console.log(itemInWishlist._id);
+        
         return itemInWishlist._id != wishlistedItemId;
       }
     );
-    console.log({ updatedWishlistItems });
+    
     wishlist.wishlistItems = updatedWishlistItems;
     await wishlist.save();
 

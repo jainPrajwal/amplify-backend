@@ -7,9 +7,38 @@ const {
 } = require("../controllers/cart.controller");
 const { authVerify } = require("../middlewares/authVerify.middleware");
 const { cartHandler } = require("../middlewares/cart-handler.middleware");
+const {User} = require(`../models/user.model`)
 
 const router = express.Router();
 
+router.post(`/clear`, authVerify, async (req, res) => {
+  try {
+    const { user } = req;
+    console.log(`USER `, user)
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      {
+        cart: null,
+      },
+      {
+        new: true,
+      }
+    );
+ 
+    res.status(201).json({
+      success: true,
+      message: `cart cleared successfully`,
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error(`error `, error);
+    res.json({
+      success: false,
+      message: `something went wrong `,
+      errorMessage: error.message,
+    });
+  }
+});
 router.param("userId", authVerify);
 router.param("userId", cartHandler);
 router
@@ -32,7 +61,6 @@ router
 
 router
   .route("/:userId/:productId")
-  
   .post(async (req, res) => {
     const updatedMetricsFromClient = req.body;
     await updateItemInDatabase(req, res, updatedMetricsFromClient);
@@ -40,5 +68,6 @@ router
   .delete(async (req, res) => {
     await removeItemFromDatabase(req, res);
   });
+ 
 
 module.exports = { router };

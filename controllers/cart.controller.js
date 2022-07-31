@@ -59,6 +59,7 @@ const saveItemToDatabase = async (req, res, productToBeSaved) => {
     const updatedProduct =
       increaseQuantityOfProductInRespectiveColor(productToBeSaved);
 
+      
     const savedItemToCart = await new CartItem(updatedProduct).save();
     const user = req.user;
     const cart = await findCartByUser(user);
@@ -71,7 +72,7 @@ const saveItemToDatabase = async (req, res, productToBeSaved) => {
     } else {
       //just add the cartItemId
       cart.cartItems.push(savedItemToCart._id);
-      console.log({ cart });
+      
       await cart.save();
     }
 
@@ -150,7 +151,7 @@ const removeItemFromDatabase = async (req, res) => {
 
 const checkIfUserHasCart = async (user) => {
   const cart = await findCartByUser(user);
-  console.log({ cart });
+  
 };
 
 module.exports = {

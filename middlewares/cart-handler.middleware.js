@@ -3,14 +3,14 @@ const { Cart } = require("../models/cart.model");
 const { findCartByUser } = require("../utils/cart.utils");
 const { findUserByUserId } = require("../utils/user.utils");
 
-const getOrCreateCart = async (req, next) => {
+const getOrCreateCart = async (req, res, next) => {
   const { userId } = req.params;
 
   try {
     const user = await findUserByUserId(userId);
     const cart = await findCartByUser(user);
     let updatedCart = [];
-    console.log("from getOrCreateCaer", { cart });
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -23,12 +23,12 @@ const getOrCreateCart = async (req, next) => {
       });
     } else {
       const newCartObj = { cartItems: [] };
-      updatedCart = await new Cart(newCartObj).save().populate("cartItems");
+      updatedCart = await new Cart(newCartObj).save();
       user.cart = updatedCart;
       await user.save();
     }
 
-    req.cart = updatedCart;
+    req.cart = await updatedCart.populate("cartItems");
     next();
   } catch (error) {
     console.error(error);
@@ -40,9 +40,9 @@ const getOrCreateCart = async (req, next) => {
 };
 
 const cartHandler = async (req, res, next) => {
-  console.log("cartHandler")
+  
   try {
-    await getOrCreateCart(req, next);
+    await getOrCreateCart(req,res,  next);
   } catch (error) {
     return res.json({
       success: false,

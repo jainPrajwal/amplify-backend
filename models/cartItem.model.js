@@ -5,6 +5,7 @@ const ColorSchema = new Schema({
   color: String,
   maxQuantityOfItemInRespectiveColor: Number,
   quantityOfItemInRespectiveColor: Number,
+  image:String
 });
 
 const CartItemSchema = new Schema({
